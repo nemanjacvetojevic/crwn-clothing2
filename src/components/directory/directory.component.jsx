@@ -49,8 +49,8 @@ class DirectoryMenu extends React.Component {
         return (
             <div className='directory-menu'>
                 {
-                    this.state.sections.map(({title, imageUrl, id, size}) => (
-                        <MenuItem title={title} imageUrl={imageUrl} id={id} size={size} />
+                    this.state.sections.map(({id, ...otherSectionProps}) => (
+                      <MenuItem key={id}  {...otherSectionProps} />
                     ))}
             </div>
         )
@@ -58,3 +58,8 @@ class DirectoryMenu extends React.Component {
 }
     
 export default DirectoryMenu
+
+// <MenuItem title={title} imageUrl={imageUrl} key={id} size={size} linkUrl={linkUrl} /> 
+// <MenuItem key={id}  {...otherSectionProps} /> 
+// ovo iznad je ES6 primer spred operatora, ono sto mozemo uraditi ako su atributi koje 
+// prosledjujemo jednaki vrednostima koje prosledjujemo. Ekvivalentno resenje je linija iznad 
