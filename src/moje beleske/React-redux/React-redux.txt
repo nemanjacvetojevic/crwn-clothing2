@@ -1,0 +1,42 @@
+Kako stanje (state) nase aplikacije raste javlja se potreba za novim resenjem
+gde ce korisccenje podataka biti realizovano kroz redux.js biblioteku. React redux 
+biblioteka nam omogucava da stanje cele aplikacije prebacimo na jedno mesto, u jedan veliki objekat
+odakle cemo kasnije po potrebi koristi stanja koja su nam potrebna. Ne sme zaboraviti da je kljuc 
+dobrog react developera da odluci gde se koristi stanje, i gde ono zivi. 
+Iako u pocetku Redux deluje kao napredna tema, tema koja se cini da ju je teze razumeti, ono sto ce 
+postati jasnije je kako se podaci krecu (data flow) u nasoj aplikaciji.
+
+Zasto zelimo da koristimo redux?
+Dobar je za menadzment velikog stanja nase aplikacije
+Koristan za deljnenje podataka izmedju komponenti 
+Ima predvidljiv menadzment stanja koristeci 3 prinipa
+
+3 Principa:
+I signle source of truth - fensi nacin da se kaze da imamo jedan veliki objekat u kojem se
+nalazi celo nase stanje aplikacije
+II state is read only - ovo ohrabruje nesto sto je poznato kao nepromenljivost (immutability), sto u 
+prevodu znaci 
+III Changes using pure functions - Promenu stanja mozemo izvriti cistim funkcijama, a pure funkcije su one
+cite izlazne vrednosti uvek mozemo da predvimo na osnovu ulaznih.
+
+Redux flow - je nacin na koji realizujemo redux cuvanje i promenu stanja, ne narusavajuci tok stanja u jednom
+pravcu ( unidirectional data flow). On se realizuje kroz 4 faze (5 ako se ukljuci middleware) a to su
+Action -> Root Reducer -> Store -> DOM changes.
+
+Akcija nastupa kada posetilac sajta, na primer dodje u interakciju sa aplikacijom, na taj nacin se akcija aktivira
+takodje, jedna akcija moze izazvat drugu akciju koja ce takodje uticati na promenu nekog drugog stanja
+Root Reducer - ili Reducer je jednostavno cista (pure) funkcija, koja prima ulazne paremetre (input) , sto su 
+u nasem slucaju akcije, i na osnovu njih pravi izlazne parametr ( output ). I taj output je zapravo 
+State (stanje) ili zargonski Store u redux-u gde se nalazi celo stanje nase aplikacije
+DOM CHANGES - na osnovu toga sta se nalazi u Store-u React ce izmeniti prikaz ( rerender-ovace DOM)
+
+Ono sto je bitno naglasiti da se iza redux-ovog koncepta krije noviji FLUX PATTERN (sablon),
+i ovaj sablon se temelji na cetiri stvari koje smo na neki nacin vec objasnili
+Action -> Dispatcher -> Store -> View
+
+Ono sto je takodje bitno naglasiti, je to koji problem redux resava. kada prosledjujemo propse komponetama
+da bi dalje prosledili nestovanim komponentama, princip rada kojim tim putem ostvarujemo poznatiji je
+kao propr drilling, a ovo je losa praksa. Razlog zasto je losa praksa je zato sto komponenta koja dalje
+prosledjuje props svojoj nestovanoj komponenti nece koristiti taj prop, niti mu je raj prop potreban 
+ni u kom slucaju. A obzirom da nase alikacije mogu porasti do vecih skala desava se da imamo vise desetina
+propova koji ne sluze nista komponenti sem da je dalje proslede svojim child-ovima

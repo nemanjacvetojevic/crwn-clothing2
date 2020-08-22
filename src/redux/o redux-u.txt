@@ -1,0 +1,74 @@
+Zasto Redux? 
+
+Jedna od velikih pitanja kada je u pitanju dobar React developer, je 
+sposobnost da odluci gde ce state (stanja) aplikacije da zive, obzirom 
+da je React front-end developer UI biblioteka. A kada su u pitanju 
+aplikacije koje upravljaju sa velikim obimom podataka njihovim stanjima
+u odredjenim slucajevima moze doci do nepreglednosti tih stanja,
+prop drilling-a, sto nije dobra praksa, sto daje tezu sliku odrzavanja tih
+stanja. 
+
+Ono sto biblioteka Redux resava je menadzment tih stanja, tako sto sva stanja
+izvlaci u jednu prodavnicu (redux store) i na taj nacin sve komponente imaju pristup
+tom store-u. Redux je dobar za:
+- menadzment velikog obima stanja (kada nasa aplikacija postane velika)
+- Korisnost za deljenje podataka izmedju komponenti, kod Reacta je to malo teze, i 
+postize se dizanjem stanja (lifting state) u roditeljsku (parrent) komponentu, medjutim 
+kada imamo dosta komponenti, veliku aplikaciju, ovo otezava citljivost i pracenje stanja
+- Redux ima predvidljivo upravljanje stanjima koristeci se pravilom "3 principa"
+
+3 Principa:
+1. Single source of truth - 1 veliki objekat koji opisuje celo stanje nase aplikacije
+2. State is read only - ovaj princip govori o nepromenjlivosti objekta stanja (immutability),
+na ovaj nacin se sprecavaju nezelje greske, sto znaci da ce se umesto menjanja stanja praviti novo stanje
+objekta preko korisnickih akcija (funkcije koje uzimaju prethodno stanje i prave novo)
+3. Changes using pure functions - korisite se takozvane ciste funkcije kako bi se stanje izmenilo (tj napravilo novo)
+sto znaci kada bi unosili iste argumente koje prosledjujemo funkciji uvek bi dobijali istu povratnu informaciju
+
+Redux Flow - tok Redux-a:
+
+Action - kada korisnik odluci da izmeni stanje neke komponente (klikne na dugme itd..)
+Root Reducer - akcija se preosledjuje Root Reducer-u (ovo takodje vazi za sve akcije unutar aplikacije),
+a Root Reducer je cista funkcija primi input parametre, u nasem slucaju akciju da je korisnik
+ npr kliknuo dugme, na osnovu inputa napravi output (napravi stanje koje mi zovemo Store)
+Store - Celo stanje aplikacije
+DOM Changes - na osnovu stanja u stor-u dolazi do promene DOM-a
+
+Flux Pattern
+Redux koristi arhitekturu Flux sablona a to je 
+ACTION-->DISPATCHER-->STORE-->VIEW
+ukratko objasnjenje ovog sablona bi bilo da imamo akciju koju prosledjujemo dispecer funkciji
+(ukratko dispecer prikuplja, analizira i prati podatke) koji otprema akciju nasem Store-u koji
+utice na dalje promene prikaza (VIEW-a) i na taj nacin dobijamo ono sto se i u Reactu koristi
+a to je poznati "One way data flow" podaci teku samo u jednom smeru
+
+Akcije i reduceri: 
+Kako bi malo dublje opisali koriscenje redux biblioteke razlozicemo akcije u vise i reducer funkcije
+u akcije i reducere koji sluze pojedinim svrhama, npr postavljanje trenutnog korisnika:
+akcija bi u ovom slucaju bila objekat koji sadrzi type(tip akcije) i payload (promena stanja) na taj 
+nacin definisemo sta ce reducer funkcija uraditi, tj preko type-a definisemo koju reducer funkciju cemo
+koristiti a preko payload-a sta ce reducer update-ovati
+
+Kako je struktuirana reducer funkcija:
+struktuirana je tako da kao ulazne parametre dobije trenutno stanje i akciju koju treba da primeni
+a onda na osnovu tipa akcije, koristeci switch-case vraca novo stanje ili isto stanje 
+ukoliko se tip akcije ne poklapa ni sa jednim slucajem switch-a (znaci default: return state)
+
+Middleware - nesto sto se ne nuzno nalazi izmedju akcija i root reducer-a. kao sto samo
+ime kaze pre nego sto akcija dodje do root reducera ona se moze naci u Middleware-u. Ono sto
+predstavlja ovaj koncept je u sustini deo koda koji dobija akciju pre root reducer-a, ono 
+sto ce Middleware odraditi sa akcijom pre root reducera je do samog Middleware-a. Da bi razumeli
+redux Middleware koji ce se najcesce koristiti je "logger Middleware" i sve sto logger
+radi zapravo je da loguje koje akcije se desavaju u kojem trenutku i koje je stanje ore i nakon
+root reducer funkcije.
+
+Provider - HOC koja ce nam dati na raspolaganje da koristimo redux biblioteku. Provider
+komponenta treba da wrappuje celu aplikaciju kako bi cela aplikacija imala pristup 
+redux konceptima (Store-u, Reducer-u, Action-u)
+
+Da bi poceli sa koriscnenjem redux moramo poceti sa index.js fajlom. Odatle cemo obezbediti
+nasoj aplikaciji da koristi redux biblioteku. I prvo sto cemo uraditi je da importujemo 
+Provider HOC komponentu koja omoguciti celoj aplikaciji da koristi redux i da pristupa
+store objektu. Provider se nalazi u 'react-redux' biblioteci. Provider je komponenta
+koja objedinjuje (parrent) celu nasu aplikaciju i ono sto je bitno je da se cela
+aplikacija nalazi u Provider komponenti
